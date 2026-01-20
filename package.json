@@ -1,0 +1,19 @@
+{
+  "name": "screenshot-service",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "hono": "^4.11.4",
+    "puppeteer": "^24.35.0"
+  }
+}

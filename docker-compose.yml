@@ -1,0 +1,8 @@
+services:
+  screenshot-service:
+    build: .
+    ports:
+      - "3020:3020"
+    cap_add:
+      - SYS_ADMIN
+    init: true
