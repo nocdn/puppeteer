@@ -6,3 +6,4 @@ services:
     cap_add:
       - SYS_ADMIN
     init: true
+    restart: always
