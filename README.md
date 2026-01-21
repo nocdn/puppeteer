@@ -14,3 +14,5 @@ curl -X POST "http://localhost:3020/screenshot" \
 ```
 
 ```zoom``` body parameter is optional, defaults to 1.0
+
+The default port is ```3020```, can be changed in ```docker-compose.yml```
