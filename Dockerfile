@@ -3,12 +3,16 @@ FROM oven/bun:1-debian AS builder
 WORKDIR /app
 
 COPY package.json bun.lock* ./
-
 RUN bun install --frozen-lockfile
+
 COPY src ./src
 COPY tsconfig.json ./
 
-FROM oven/bun:1-debian AS runner
+RUN bun build --compile --minify --target bun --outfile server ./src/index.ts
+
+FROM debian:bookworm-slim AS runner
+
+RUN groupadd -r appuser && useradd -r -g appuser appuser
 
 RUN apt-get update && apt-get install -y \
     chromium \
@@ -34,14 +38,13 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/src ./src
-COPY --from=builder /app/tsconfig.json ./
+COPY --from=builder --chown=appuser:appuser /app/server ./server
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
+USER appuser
+
 EXPOSE 3020
 
-CMD ["bun", "run", "src/index.ts"]
+CMD ["./server"]

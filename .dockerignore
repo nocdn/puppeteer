@@ -4,3 +4,17 @@ node_modules
 *.md
 .cursor
 .DS_Store
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Build artifacts
+dist
+*.log
+
+# Docker (don't include in context)
+Dockerfile*
+docker-compose*.yml

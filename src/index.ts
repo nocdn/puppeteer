@@ -78,7 +78,9 @@ app.post("/screenshot", async (c) => {
   }
 });
 
-export default {
+const server = Bun.serve({
   port: 3020,
   fetch: app.fetch,
-};
+});
+
+console.log(`Screenshot service running on http://localhost:${server.port}`);
