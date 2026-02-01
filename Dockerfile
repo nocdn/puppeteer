@@ -12,7 +12,9 @@ RUN bun build --compile --minify --target bun --outfile server ./src/index.ts
 
 FROM debian:bookworm-slim AS runner
 
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN groupadd -r appuser && useradd -r -g appuser -m appuser \
+    && mkdir -p /home/appuser/.config /home/appuser/.cache /home/appuser/.local \
+    && chown -R appuser:appuser /home/appuser
 
 RUN apt-get update && apt-get install -y \
     chromium \

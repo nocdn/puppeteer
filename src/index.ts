@@ -12,6 +12,7 @@ app.get("/", (c) => {
   return c.json({
     message: "Screenshot Service",
     usage: "POST /screenshot with JSON body: { url: string, zoom?: number }",
+    returns: "jpeg image"
   });
 });
 
@@ -44,7 +45,12 @@ app.post("/screenshot", async (c) => {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+      ],
     });
 
     const page = await browser.newPage();
@@ -64,6 +70,11 @@ app.post("/screenshot", async (c) => {
     });
 
     await browser.close();
+
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] Screenshot captured`);
+    console.log(`[${timestamp}] URL: ${url}`);
+    console.log(`[${timestamp}] Zoom: ${zoom}`);
 
     return new Response(screenshot.buffer.slice(screenshot.byteOffset, screenshot.byteOffset + screenshot.byteLength) as ArrayBuffer, {
       headers: {
